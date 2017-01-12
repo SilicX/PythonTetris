@@ -1,3 +1,3 @@
 from TController import *
 
-TController(10,15).start()
+print TController(10,15).start()

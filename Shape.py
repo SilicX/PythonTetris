@@ -5,14 +5,22 @@ def toColor(n):
     return cl[n-1]
 
 class Shape:
+    lastShape=-1
+    lastColor=-1
     def __init__(self):
         self.shape=[[0]*4]*4
-        self.color=random.randint(1,8)
-        # red yellow blue green purple orange brown grey
-        self.randomShape()
-    def randomShape(self):
-        c=random.randint(1,7)
-        n=self.color
+
+        c=Shape.lastShape
+        while c==Shape.lastShape:
+            c=random.randint(1,7)
+        Shape.lastShape=c
+
+        n=Shape.lastColor
+        while n==Shape.lastColor:
+            n=random.randint(1,8)
+        self.color=n
+        Shape.lastColor=n
+
         if(c==1):
             self.shape=[[0,n,0,0],
                         [0,n,0,0],

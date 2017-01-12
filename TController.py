@@ -17,7 +17,7 @@ class TController:
     def start(self):
         self.model.releaseNewShape()
         self.onTimer()
-        self.view.window.mainloop()
+        return self.view.window.mainloop()
     def failed(self):
         self.failState=True
         self.view.failedAnimation(self.model.score)
@@ -35,6 +35,10 @@ class TController:
 
         self.view.refreshWindow(self.model)
         self.view.window.after(self.speed,self.onTimer)
+
+        self.speed=500-self.model.score/2
+        if self.speed<200:
+            self.speed=200
 
     def moveLeftEvent(self,event):
         if self.pauseState:

@@ -40,19 +40,16 @@ class TModel:
         self.nextShape=Shape()
 
     def fall(self):
-        s=0
         for i in xrange(self.hei+4):
             for j in xrange(self.wid):
-                s+=self.overlapFrame.frame[i-4][j]*self.mainFrame.frame[i-3][j]
+                if self.overlapFrame.frame[i-4][j]*self.mainFrame.frame[i-3][j]:
+                    return False
 
-        if s==0:
-            self.anchor=(self.anchor[0]+1,self.anchor[1])
-            for i in xrange(self.hei-1,-4,-1):
-                    self.overlapFrame.frame[i]=self.overlapFrame.frame[i-1]
-            self.overlapFrame.frame[-4]=[0]*self.wid
-            return True
-        else:
-            return False
+        self.anchor=(self.anchor[0]+1,self.anchor[1])
+        for i in xrange(self.hei-1,-4,-1):
+                self.overlapFrame.frame[i]=self.overlapFrame.frame[i-1]
+        self.overlapFrame.frame[-4]=[0]*self.wid
+        return True
 
     def moveLeft(self):
         for i in xrange(self.hei+4):
@@ -97,14 +94,14 @@ class TModel:
                         self.anchor[0]+self.anchor[1]-i)
                     p=(int(p[0]),int(p[1]))
                     renew.append(p+(self.overlapFrame.frame[i][j],))
-                    if p[0]>=self.hei:      # too too low
+                    if p[0]>=self.hei or p[0]<-4:      # too too low/high
+                        return False
+                    elif self.mainFrame.frame[p[0]][p[1]]!=0:     #blocked
                         return False
                     if p[1]<0:              # too left
                         offset=min(offset,p[1])
                     elif p[1]>=self.wid:    # too right
                         offset=max(offset,p[1]-self.wid+1)
-                    elif self.mainFrame.frame[p[0]][p[1]]!=0:     #too low
-                        return False
 
         self.overlapFrame.clear()
         for x in renew:
